@@ -7,6 +7,7 @@
         url: https://gitlab-fnwi.uva.nl/skoulou1/devops-material/-/raw/main/ansible/kubernetes.repo
         dest: /etc/yum.repos.d/kubernetes.repo
 
+    # Disable gpgcheck to prevent package errors.
     - name: Disable gpgcheck
       ansible.builtin.lineinfile:
         path: /etc/yum.repos.d/kubernetes.repo
@@ -24,7 +25,6 @@
 
     - ansible.builtin.command: docker run hello-world
       register: docker_output
-
 
 
 - hosts: master
@@ -47,11 +47,11 @@
       become: yes
       register: join_cmd
 
+    # Dummy host to use command in worker.
     - name: Add join cmd to dummy host
       add_host:
         name: join_cmd_holder
         cmd: "{{ join_cmd.stdout }}"
-
 
 
 - hosts: worker
@@ -60,6 +60,7 @@
       debug:
         msg: "[Worker] {{ hostvars['join_cmd_holder']['cmd'] }}"
 
+    # Simply use the command that is stored in the host.
     - name: join
       shell: "{{ hostvars['join_cmd_holder']['cmd'] }}"
 
