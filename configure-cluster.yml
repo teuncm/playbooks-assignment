@@ -7,7 +7,7 @@
         url: https://gitlab-fnwi.uva.nl/skoulou1/devops-material/-/raw/main/ansible/kubernetes.repo
         dest: /etc/yum.repos.d/kubernetes.repo
 
-    # Disable gpgcheck to prevent package errors.
+    # Disable repo_gpgcheck to prevent package errors.
     - name: Disable gpgcheck
       ansible.builtin.lineinfile:
         path: /etc/yum.repos.d/kubernetes.repo
